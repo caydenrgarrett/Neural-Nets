@@ -164,6 +164,63 @@ def backpropagate(self):
 - Train over defined epochs with adjustable learning rate.
 - Track cost and accuracy (train/test).
 
+```python
+def fit(self, lr=0.01, epochs=1000):
+        self.costs = [] 
+        self.initialize_parameters()
+        self.accuracies = {"train": [], "test": []}
+        for epoch in tqdm(range(epochs), colour="BLUE"):
+            cost, cache = self.forward()
+            self.costs.append(cost)
+            derivatives = self.backpropagate()            
+            for layer in range(1, self.L):
+                self.parameters["w"+str(layer)] = self.parameters["w"+str(layer)] - lr * derivatives["dW" + str(layer)]
+                self.parameters["b"+str(layer)] = self.parameters["b"+str(layer)] - lr * derivatives["db" + str(layer)]            
+            train_accuracy = self.accuracy(self.X, self.y)
+            test_accuracy = self.accuracy(self.X_test, self.y_test)
+            if epoch % 10 == 0:
+                print(f"Epoch: {epoch:3d} | Cost: {cost:.3f} | Accuracy: {train_accuracy:.3f}")
+            self.accuracies["train"].append(train_accuracy)
+            self.accuracies["test"].append(test_accuracy)
+        print("Training terminated")
+```
+```python
+def predict(self, x):
+        params = self.parameters
+        n_layers = self.L - 1
+        values = [x]
+        for l in range(1, n_layers):
+            z = np.dot(params["w" + str(l)], values[l-1]) + params["b" + str(l)]
+            a = eval(self.activation)(z)
+            values.append(a)
+        z = np.dot(params["w"+str(n_layers)], values[n_layers-1]) + params["b"+str(n_layers)]
+        a = softmax(z)
+        if x.shape[1]>1:
+            ans = np.argmax(a, axis=0)
+        else:
+            ans = np.argmax(a)
+        return ans
+    
+    
+def accuracy(self, X, y):
+    P = self.predict(X)
+    return sum(np.equal(P, np.argmax(y, axis=0))) / y.shape[1]*100
+```
+```python
+X_train = data_train.values.T
+y_train = labels_train.values.astype(int)
+y_train = one_hot_encode(y_train, 10)
+X_test = data_test.values.T
+y_test = labels_test.values.astype(int)
+y_test = one_hot_encode(y_test, 10)
+print(X_train.shape, X_test.shape)
+print(y_train.shape, y_test.shape)
+```
+```
+(784, 19999) (784, 9999)
+```
+(10, 19999) (10, 9999)
+
 ### Evaluation
 
 - Accuracy function to measure performance.
@@ -229,6 +286,7 @@ Initializing parameters for layer: 3.
 100%|██████████| 200/200 [03:14<00:00,  1.03it/s]
 Training terminated
 ```
+![image alt](https://github.com/caydenrgarrett/Neural-Nets/blob/4a02619f0141e1cab0cdf9ce1c55f37dd7188638/COE.png)
 
 ## 📈 Results
 
