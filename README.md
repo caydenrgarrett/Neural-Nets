@@ -14,7 +14,26 @@ The model is trained and evaluated on the MNIST handwritten digits dataset (784 
 ### Exploratory Data Analysis
 
 - Display random MNIST digit samples.
-- Inspect dataset dimensions and label distribution.
+- Inspect dataset dimensions and label distribution. <br>
+
+```python
+n = np.random.choice(np.arange(data.shape[0]))
+print(n)
+
+test_img = data.iloc[n].values
+test_label = labels.iloc[n]
+
+print(test_img.shape)
+
+side_length = int(np.sqrt(test_img.shape))
+reshaped_test_img = test_img.reshape(side_length, side_length)
+
+print("Image Label: " + str(test_label))
+
+plt.imshow(reshaped_test_img, cmap="Greys")
+plt.axis("off")
+plt.show()
+```
 
 ### Model Architecture
 
