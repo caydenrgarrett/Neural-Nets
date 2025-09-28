@@ -1,4 +1,6 @@
-# 🧠 Neural Network from Scratch (MNIST)
+# 🧠 Neural Network from Scratch (MNIST) <br>
+
+![image alt](https://www.datocms-assets.com/117510/1722402042-art_artificial_intelligence_neural_network_explain-281-29.png)
 
 This project implements a fully-connected neural network from scratch using only NumPy and Matplotlib.
 The model is trained and evaluated on the MNIST handwritten digits dataset (784 features, 10 classes).
